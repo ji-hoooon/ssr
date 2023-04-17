@@ -30,6 +30,7 @@ public class User {
     private String role; // USER, MANAGER, ADMIN
     private Boolean status; // true, false
 
+//    private int loginCount; //로그인 5회 이상 실패시 차단
     private LocalDateTime createdAt; // LocalDateTime -> Timestamp
     private LocalDateTime updateAt;
 
