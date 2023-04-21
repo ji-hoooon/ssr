@@ -1,5 +1,6 @@
 package shop.mtcoding.securityapp.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -25,9 +26,25 @@ public class HelloController {
     public ResponseEntity<?> userCheck(
             @PathVariable Long id,
             @AuthenticationPrincipal MyUserDetails myUserDetails){
-        String username =myUserDetails.getUser().getUsername();
-        String role = myUserDetails.getUser().getRole();
-        return ResponseEntity.ok().body(username+" : "+role);
+        //@AuthenticationPrincipal Authentication에 접근해서 UserDetails 타입을 가져옴
+        //: loginArgumentResolver 대신 해줌
+
+        if(id.longValue()==myUserDetails.getUser().getId()){
+            String username =myUserDetails.getUser().getUsername();
+            String role = myUserDetails.getUser().getRole();
+            return new ResponseEntity<>(username+" : "+role, HttpStatus.OK);
+        }
+        else if(myUserDetails.getUser().getRole().equals("ADMIN")){
+            //admin 서버를 따로 만드는 게 낫다.
+            String username =myUserDetails.getUser().getUsername();
+            String role = myUserDetails.getUser().getRole();
+            return new ResponseEntity<>(username+" : "+role, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>("권한 없음", HttpStatus.FORBIDDEN);
+        }
+
+//        return ResponseEntity.ok().body(username+" : "+role);
     }
 
     @GetMapping("/")

@@ -1,5 +1,7 @@
 package shop.mtcoding.securityapp.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,11 +10,12 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
-
+    private final Logger log = LoggerFactory.getLogger(getClass());
     @Bean
     BCryptPasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
+    //패스워드 암호화 알고리즘 BCrypt-> 60Byte로 단방향 해시 암호화 +솔트
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -32,12 +35,14 @@ public class SecurityConfig {
 
                 //2-1. 로그인 성공시 타는 핸들러
                 .successHandler((eq, resp, authentication) -> {
-                    System.out.println("디버그 : 로그인이 완료되었습니다");
+//                    System.out.println("디버그 : 로그인이 완료되었습니다");
+                    log.debug("디버그 : 로그인이 완료되었습니다");
                     resp.sendRedirect("/");
                 })
                 //2-2. 로그인 실패시 타는 핸들러
                 .failureHandler((req, resp, ex) -> {
-                    System.out.println("디버그 : 로그인 실패 -> " + ex.getMessage());
+//                    System.out.println("디버그 : 로그인 실패 -> " + ex.getMessage());
+                    log.debug("디버그 : 로그인 실패 -> " + ex.getMessage());
                 });
 
         // 3. 인증, 권한 필터 설정

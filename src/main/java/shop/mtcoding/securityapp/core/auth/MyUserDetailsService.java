@@ -20,6 +20,8 @@ public class MyUserDetailsService implements UserDetailsService {
 
     // /login + POST + FormUrlEncoded + username, password
     // Authentication 객체 만들어짐
+    //: UserDetails 리턴하면, 시큐리티가 패스워드 검증 수행 (UsernamePasswordToken 값과 UserDetails의 getPassword() 비교)
+    //rawPassword : 인코딩된 패스워드 -> rawPassword를 인코딩해서 비교한다.
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.debug("디버그 : UsernamePasswordAuthenticationFilter가 loadUserByUsername 호출함"+username);
